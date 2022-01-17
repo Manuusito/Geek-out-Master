@@ -2,8 +2,7 @@ package GeekOutMasters;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 /**
  * This class is used for ...
@@ -55,6 +54,7 @@ public class GUIGridBagLayout extends JFrame {
     private JPanel panelDados, panelInactivos, panelDatos, panelUsados;
     private ImageIcon imageDado, ImageMarcador;
     private GUIGridBagLayout.Escucha escucha;
+    private Click click;
     private ModelGeek modelGeek;
 
     /**
@@ -87,6 +87,7 @@ public class GUIGridBagLayout extends JFrame {
         //this.add(headerProject,BorderLayout.NORTH); //Change this line if you change JFrame Container's Layout
 
         escucha = new Escucha();
+        click =new Click();
         modelGeek = new ModelGeek();
 
         ayudax = new JButton("?");
@@ -119,6 +120,9 @@ public class GUIGridBagLayout extends JFrame {
         panelDados = new JPanel();
         panelDados.setPreferredSize(new Dimension(400,240));
         panelDados.setBorder(BorderFactory.createTitledBorder("Tus Dados Activos"));
+        panelDados.addMouseListener(click);
+        panelDados.addMouseMotionListener(click);
+        panelDados.addKeyListener(click);
         panelDados.add(dado1);
         panelDados.add(dado2);
         panelDados.add(dado3);
@@ -141,6 +145,9 @@ public class GUIGridBagLayout extends JFrame {
         dado10= new JLabel(imageDado);
 
         panelInactivos = new JPanel();
+        panelInactivos.addMouseListener(click);
+        panelInactivos.addMouseMotionListener(click);
+        panelInactivos.addKeyListener(click);
         panelInactivos.setPreferredSize(new Dimension(400,240));
         panelInactivos.setBorder(BorderFactory.createTitledBorder("Tus Dados Inactivos"));
         panelInactivos.add(dado8);
@@ -280,11 +287,75 @@ public class GUIGridBagLayout extends JFrame {
             }else if (e.getSource()==usoDados){
                 JOptionPane.showMessageDialog(null,MENSAJE_DADOS);
         }
+        }
+    }
+
+    private class Click implements MouseListener, MouseMotionListener, KeyListener{
+        @Override
+
+        public void mouseClicked(MouseEvent e) {
+            if(e.getSource()==panelInactivos){
+                modelGeek.HayCorazones();
+                if(modelGeek.HayCorazones()>=1) {
+                    modelGeek.calcularTiroInactivos1();
+                    int[] caras = modelGeek.getCaras();
 
 
+                    imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[7] + ".jpeg"));
+                    dado8.setIcon(imageDado);
 
+                    panelUsados.add(modelGeek.CaraCorazones());
+                    panelDados.remove(modelGeek.CaraCorazones());
 
+                    revalidate();
+                    repaint();
+                }
+            }
 
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent e) {
 
         }
     }
