@@ -12,7 +12,30 @@ import java.awt.event.ActionListener;
  */
 public class GUIGridBagLayout extends JFrame {
 
-    private static final String MENSAJE_INICIO = "Bienvenido a Geek Out Masters \nOprime el botón lanzar para iniciar el juego\nSi tu tiro de salida es 7 u 11 ganas con Natural\nSi tu tiro de salida es 2, 3 u 12 pierdes con Craps\nSi sacas cualquier otro valor establecerás el Punto\nEstando en punto, podrás seguir lanzando los dados\n pero ahora ganarás si sacas nuevamente el valor del Punto\nsin que previamente hayas sacado 7";
+    private static final String MENSAJE_INICIO = "Bienvenido a Geek Out Masters " +
+            "\nOprime el botón lanzar para iniciar el juego" +
+            "\nEl objetivo de este juego es conseguir la mayor cantidad de puntos juntando dados cuya cara visible es la\n" +
+            "cara 42." +
+            "\nGeek Out Masters no es solo suerte, también importa la estrategia ya que una vez que se lanzan\n" +
+            "los dados TODAS las caras deberán ejecutarse:" +
+            "\nSi sacas cualquier otro valor establecerás el Punto" +
+            "\nEstando en punto, podrás seguir lanzando los dados" +
+            "\n pero ahora ganarás si sacas nuevamente el valor del Punto" +
+            "\nsin que previamente hayas sacado 7";
+
+    private static final String MENSAJE_DADOS = "Uso de Dados en Geek Out Masters " +
+            "\n1. El Meeple permite relanzar otro dado en juego, es decir, de la sección dados activos." +
+            "\n2. La Nave Espacial envía un dado no usado (de la sección dados activos) a la sección de dados\n" +
+            "inactivos."+
+            "\n3. El Superhéroe permite que cualquier dado no usado (sección dados activos) sea volteado y\n" +
+            "colocado en su cara opuesta." +
+            "\n4. El Corazón permite tomar un dado de la sección de dados inactivos y lanzarlo para que sea un\n" +
+            "nuevo dado activo." +
+            "\n5. El Dragón es la cara que se quiere evitar, ya que si al final de la ronda es el último dado activo que\n" +
+            "queda se habrán perdido todos los puntos ganados y acumulados." +
+            "\n6. 42 es cara que permite sumar puntos al final de la ronda.";
+
+
     private Header headerProject;
     private JLabel dado1;
     private JLabel dado2;
@@ -25,13 +48,12 @@ public class GUIGridBagLayout extends JFrame {
     private JLabel dado9;
     private JLabel dado10;
     private JLabel marcador;
+    private JTextArea puntajeTex;
     private JButton lanzar;
-    private JButton ayuda;
-    private JButton salir;
+    private JButton ayudax;
+    private JButton usoDados;
     private JPanel panelDados, panelInactivos, panelDatos, panelUsados;
     private ImageIcon imageDado, ImageMarcador;
-    private JTextArea mensajesSalida;
-    private JTextArea resultadosDados;
     private GUIGridBagLayout.Escucha escucha;
     private ModelGeek modelGeek;
 
@@ -64,14 +86,26 @@ public class GUIGridBagLayout extends JFrame {
         //headerProject = new Header("Header ...", Color.BLACK);
         //this.add(headerProject,BorderLayout.NORTH); //Change this line if you change JFrame Container's Layout
 
-        ayuda = new JButton("?");
-        //ayuda.addActionListener(escucha);
+        escucha = new Escucha();
+        modelGeek = new ModelGeek();
+
+        ayudax = new JButton("?");
+        ayudax.addActionListener(escucha);
         constraints.gridx=0;
         constraints.gridy=1;
         constraints.gridwidth=1;
         constraints.fill=GridBagConstraints.NONE;
         constraints.anchor=GridBagConstraints.LINE_START;
-        this.add(ayuda,constraints);
+        this.add(ayudax,constraints);
+
+        usoDados = new JButton("Dados ¿?");
+        usoDados.addActionListener(escucha);
+        constraints.gridx=0;
+        constraints.gridy=1;
+        constraints.gridwidth=1;
+        constraints.fill=GridBagConstraints.NONE;
+        constraints.anchor=GridBagConstraints.CENTER;
+        this.add(usoDados,constraints);
 
         imageDado = new ImageIcon(getClass().getResource("/resources/dado.jpeg"));
         dado1= new JLabel(imageDado);
@@ -147,7 +181,7 @@ public class GUIGridBagLayout extends JFrame {
         constraints.anchor=GridBagConstraints.CENTER;
         add(panelDatos,constraints);
 
-        lanzar = new JButton("Iniciar");
+        lanzar= new JButton("Iniciar");
         lanzar.addActionListener(escucha);
         constraints.gridx=0;
         constraints.gridy=4;
@@ -155,6 +189,22 @@ public class GUIGridBagLayout extends JFrame {
         constraints.fill=GridBagConstraints.NONE;
         constraints.anchor=GridBagConstraints.CENTER;
         add(lanzar,constraints);
+
+
+
+        puntajeTex = new JTextArea(1,31);
+        puntajeTex.setBorder(BorderFactory.createTitledBorder("Resultados"));
+        puntajeTex.setText("Rondas: "+ "Puntos: ");
+        puntajeTex.setBackground(null);
+        puntajeTex.setEditable(false);
+
+        constraints.gridx=1;
+        constraints.gridy=1;
+        constraints.gridwidth=1;
+        constraints.fill=GridBagConstraints.BOTH;
+        constraints.anchor=GridBagConstraints.LINE_END;
+        this.add(puntajeTex,constraints);
+
 
 
 
@@ -187,7 +237,7 @@ public class GUIGridBagLayout extends JFrame {
      */
     public static void main(String[] args){
         EventQueue.invokeLater(() -> {
-            GUIGridBagLayout miProjectGUI = new GUIGridBagLayout();
+            GUIGridBagLayout GeekOutMasters = new GUIGridBagLayout();
         });
     }
 
@@ -215,21 +265,27 @@ public class GUIGridBagLayout extends JFrame {
                 dado6.setIcon(imageDado);
                 imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[6] + ".jpeg"));
                 dado7.setIcon(imageDado);
-                imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[7] + ".jpeg"));
-                dado8.setIcon(imageDado);
-                imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[8] + ".jpeg"));
-                dado9.setIcon(imageDado);
-                imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[9] + ".jpeg"));
-                dado10.setIcon(imageDado);
+                //imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[7] + ".jpeg"));
+                //dado8.setIcon(imageDado);
+                //imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[8] + ".jpeg"));
+                //dado9.setIcon(imageDado);
+                //imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[9] + ".jpeg"));
+                //dado10.setIcon(imageDado);
 
                 revalidate();
                 repaint();
 
+            }else if (e.getSource()==ayudax){
+                JOptionPane.showMessageDialog(null,MENSAJE_INICIO);
+            }else if (e.getSource()==usoDados){
+                JOptionPane.showMessageDialog(null,MENSAJE_DADOS);
+        }
 
 
-            }else{
 
-            }
+
+
+
         }
     }
 }
