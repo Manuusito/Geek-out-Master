@@ -5,9 +5,9 @@ import java.awt.*;
 import java.awt.event.*;
 
 /**
- * This class is used for ...
- * @autor Paola-J Rodriguez-C paola.rodriguez@correounivalle.edu.co
- * @version v.1.0.0 date:21/11/2021
+ * This class is used for play Geek out Masters
+ * @autor Manuel Cuellar manuel.cuellar@correounivalle.edu.co
+ * @version v.1.0.0 date:27/01/2022
  */
 public class GUIGridBagLayout extends JFrame {
 
@@ -15,12 +15,9 @@ public class GUIGridBagLayout extends JFrame {
             "\nOprime el botón lanzar para iniciar el juego" +
             "\nEl objetivo de este juego es conseguir la mayor cantidad de puntos juntando dados cuya cara visible es la\n" +
             "cara 42." +
-            "\nGeek Out Masters no es solo suerte, también importa la estrategia ya que una vez que se lanzan\n" +
-            "los dados TODAS las caras deberán ejecutarse:" +
-            "\nSi sacas cualquier otro valor establecerás el Punto" +
-            "\nEstando en punto, podrás seguir lanzando los dados" +
-            "\n pero ahora ganarás si sacas nuevamente el valor del Punto" +
-            "\nsin que previamente hayas sacado 7";
+            "\nGeek Out Masters no es solo suerte, también importa la estrategia"
+
+            ;
 
     private static final String MENSAJE_DADOS = "Uso de Dados en Geek Out Masters " +
             "\n1. El Meeple permite relanzar otro dado en juego, es decir, de la sección dados activos." +
@@ -50,12 +47,15 @@ public class GUIGridBagLayout extends JFrame {
     private JTextArea puntajeTex;
     private JButton lanzar;
     private JButton ayudax;
-    private JButton usoDados;
+    private JButton Reset;
+    private JButton Borrar;
+    private JButton terminarRonda, prueba;
     private JPanel panelDados, panelInactivos, panelDatos, panelUsados;
     private ImageIcon imageDado, ImageMarcador;
-    private GUIGridBagLayout.Escucha escucha;
+    private Escucha escucha;
     private Click click;
     private ModelGeek modelGeek;
+    private int rondas, puntos;
 
     /**
      * Constructor of GUI class
@@ -90,6 +90,7 @@ public class GUIGridBagLayout extends JFrame {
         click =new Click();
         modelGeek = new ModelGeek();
 
+
         ayudax = new JButton("?");
         ayudax.addActionListener(escucha);
         constraints.gridx=0;
@@ -99,23 +100,70 @@ public class GUIGridBagLayout extends JFrame {
         constraints.anchor=GridBagConstraints.LINE_START;
         this.add(ayudax,constraints);
 
-        usoDados = new JButton("Dados ¿?");
-        usoDados.addActionListener(escucha);
+        Borrar = new JButton("Borrar");
+        Borrar.addActionListener(escucha);
+        constraints.gridx=0;
+        constraints.gridy=4;
+        constraints.gridwidth=1;
+        constraints.fill=GridBagConstraints.NONE;
+        constraints.anchor=GridBagConstraints.CENTER;
+        this.add(Borrar,constraints);
+
+        terminarRonda = new JButton("Terminar Ronda");
+        terminarRonda.addActionListener(escucha);
+        constraints.gridx=0;
+        constraints.gridy=4;
+        constraints.gridwidth=2;
+        constraints.fill=GridBagConstraints.NONE;
+        constraints.anchor=GridBagConstraints.LINE_END;
+        this.add(terminarRonda,constraints);
+
+
+        Reset = new JButton("Reset");
+        Reset.addActionListener(escucha);
         constraints.gridx=0;
         constraints.gridy=1;
         constraints.gridwidth=1;
         constraints.fill=GridBagConstraints.NONE;
         constraints.anchor=GridBagConstraints.CENTER;
-        this.add(usoDados,constraints);
+        this.add(Reset,constraints);
 
         imageDado = new ImageIcon(getClass().getResource("/resources/dado.jpeg"));
         dado1= new JLabel(imageDado);
+        dado1.addMouseListener(click);
+        dado1.addMouseMotionListener(click);
+        dado1.addKeyListener(click);
+
         dado2= new JLabel(imageDado);
+        dado2.addMouseListener(click);
+        dado2.addMouseMotionListener(click);
+        dado2.addKeyListener(click);
+
         dado3= new JLabel(imageDado);
+        dado3.addMouseListener(click);
+        dado3.addMouseMotionListener(click);
+        dado3.addKeyListener(click);
+
         dado4= new JLabel(imageDado);
+        dado4.addMouseListener(click);
+        dado4.addMouseMotionListener(click);
+        dado4.addKeyListener(click);
+
         dado5= new JLabel(imageDado);
+        dado5.addMouseListener(click);
+        dado5.addMouseMotionListener(click);
+        dado5.addKeyListener(click);
+
         dado6= new JLabel(imageDado);
+        dado6.addMouseListener(click);
+        dado6.addMouseMotionListener(click);
+        dado6.addKeyListener(click);
+
         dado7= new JLabel(imageDado);
+        dado7.addMouseListener(click);
+        dado7.addMouseMotionListener(click);
+        dado7.addKeyListener(click);
+
 
         panelDados = new JPanel();
         panelDados.setPreferredSize(new Dimension(400,240));
@@ -162,6 +210,8 @@ public class GUIGridBagLayout extends JFrame {
         add(panelInactivos,constraints);
 
         panelUsados = new JPanel();
+        panelUsados.addMouseListener(click);        panelUsados.addMouseMotionListener(click);
+        panelUsados.addKeyListener(click);
         panelUsados.setPreferredSize(new Dimension(400,240));
         panelUsados.setBorder(BorderFactory.createTitledBorder("Tus Dados Usados"));
 
@@ -197,11 +247,18 @@ public class GUIGridBagLayout extends JFrame {
         constraints.anchor=GridBagConstraints.CENTER;
         add(lanzar,constraints);
 
-
+        prueba= new JButton("Realizar");
+        prueba.addActionListener(escucha);
+        constraints.gridx=0;
+        constraints.gridy=4;
+        constraints.gridwidth=2;
+        constraints.fill=GridBagConstraints.NONE;
+        constraints.anchor=GridBagConstraints.LINE_START;
+        this.add(prueba,constraints);
 
         puntajeTex = new JTextArea(1,31);
         puntajeTex.setBorder(BorderFactory.createTitledBorder("Resultados"));
-        puntajeTex.setText("Rondas: "+ "Puntos: ");
+        puntajeTex.setText("Rondas: "+rondas+ " Puntos: "+puntos);
         puntajeTex.setBackground(null);
         puntajeTex.setEditable(false);
 
@@ -212,33 +269,18 @@ public class GUIGridBagLayout extends JFrame {
         constraints.anchor=GridBagConstraints.LINE_END;
         this.add(puntajeTex,constraints);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        //corazon=0;
+        //yaEsta=0;
+        //rondas=0;
+        //puntos=0;
 
     }
 
-    /**
-     * Main process of the Java program
+public void caraToDado1() {
+    panelUsados.add(dado1);
+    panelDados.remove(dado1);
+    }
+/**     * Main process of the Java program
      * @param args Object used in order to send input data from command line when
      *             the program is execute by console.
      */
@@ -256,6 +298,7 @@ public class GUIGridBagLayout extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             if(e.getSource()==lanzar) {
+
                 modelGeek.calcularTiro();
                 int[] caras = modelGeek.getCaras();
                 imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[0] + ".jpeg"));
@@ -272,47 +315,369 @@ public class GUIGridBagLayout extends JFrame {
                 dado6.setIcon(imageDado);
                 imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[6] + ".jpeg"));
                 dado7.setIcon(imageDado);
-                //imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[7] + ".jpeg"));
-                //dado8.setIcon(imageDado);
-                //imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[8] + ".jpeg"));
-                //dado9.setIcon(imageDado);
-                //imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[9] + ".jpeg"));
-                //dado10.setIcon(imageDado);
+
+                rondas=rondas+1;
+                puntajeTex.setText("Rondas: "+rondas+ " Puntos: "+puntos);
 
                 revalidate();
                 repaint();
 
             }else if (e.getSource()==ayudax){
-                JOptionPane.showMessageDialog(null,MENSAJE_INICIO);
-            }else if (e.getSource()==usoDados){
-                JOptionPane.showMessageDialog(null,MENSAJE_DADOS);
-        }
-        }
-    }
-
-    private class Click implements MouseListener, MouseMotionListener, KeyListener{
-        @Override
-
-        public void mouseClicked(MouseEvent e) {
-            if(e.getSource()==panelInactivos){
-                modelGeek.HayCorazones();
-                if(modelGeek.HayCorazones()>=1) {
-                    modelGeek.calcularTiroInactivos1();
-                    int[] caras = modelGeek.getCaras();
+                JOptionPane.showMessageDialog(null,MENSAJE_INICIO+MENSAJE_DADOS);
+            }else if (e.getSource()== Reset) {
+                rondas=0;
+                puntos=0;
 
 
-                    imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[7] + ".jpeg"));
-                    dado8.setIcon(imageDado);
+                puntajeTex.setText("Rondas: "+rondas+ " Puntos: "+puntos);
 
-                    panelUsados.add(modelGeek.CaraCorazones());
-                    panelDados.remove(modelGeek.CaraCorazones());
+                modelGeek.calcularTiro();
+                int[] caras = modelGeek.getCaras();
+                imageDado = new ImageIcon(getClass().getResource("/resources/dado.jpeg"));
+                dado1.setIcon(imageDado);
+                imageDado = new ImageIcon(getClass().getResource("/resources/dado.jpeg"));
+                dado2.setIcon(imageDado);
+                imageDado = new ImageIcon(getClass().getResource("/resources/dado.jpeg"));
+                dado3.setIcon(imageDado);
+                imageDado = new ImageIcon(getClass().getResource("/resources/dado.jpeg"));
+                dado4.setIcon(imageDado);
+                imageDado = new ImageIcon(getClass().getResource("/resources/dado.jpeg"));
+                dado5.setIcon(imageDado);
+                imageDado = new ImageIcon(getClass().getResource("/resources/dado.jpeg"));
+                dado6.setIcon(imageDado);
+                imageDado = new ImageIcon(getClass().getResource("/resources/dado.jpeg"));
+                dado7.setIcon(imageDado);
+
+                imageDado = new ImageIcon(getClass().getResource("/resources/dado.jpeg"));
+                dado8.setIcon(imageDado);
+                imageDado = new ImageIcon(getClass().getResource("/resources/dado.jpeg"));
+                dado9.setIcon(imageDado);
+                imageDado = new ImageIcon(getClass().getResource("/resources/dado.jpeg"));
+                dado10.setIcon(imageDado);
+
+
+
+
+
+                modelGeek.BorrarCorazones();
+                modelGeek.BorrarUsados();
+                JOptionPane.showMessageDialog(null, "Juego Reiniciado.");
+
+                revalidate();
+                repaint();
+
+                ;
+
+            }else if (e.getSource()==terminarRonda){
+
+                if (rondas==5) {
+                    if (puntos >= 32) {
+                        JOptionPane.showMessageDialog(null, "has ganado :D");
+                    } else
+                        JOptionPane.showMessageDialog(null, "Has perdido");
+
+                }
+                else {
+
+                    JOptionPane.showMessageDialog(null, "Pasate de Ronda.");
+                    modelGeek.terminarRonda();
+                    modelGeek.BorrarCorazones();
+                    puntos=modelGeek.getPuntaje();
+
+                    rondas=rondas+1;
+                    puntajeTex.setText("Rondas: "+rondas+ " Puntos: "+puntos);
 
                     revalidate();
                     repaint();
+
+                    modelGeek.calcularTiro();
+                    int[] caras = modelGeek.getCaras();
+                    imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[0] + ".jpeg"));
+                    dado1.setIcon(imageDado);
+                    imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[1] + ".jpeg"));
+                    dado2.setIcon(imageDado);
+                    imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[2] + ".jpeg"));
+                    dado3.setIcon(imageDado);
+                    imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[3] + ".jpeg"));
+                    dado4.setIcon(imageDado);
+                    imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[4] + ".jpeg"));
+                    dado5.setIcon(imageDado);
+                    imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[5] + ".jpeg"));
+                    dado6.setIcon(imageDado);
+                    imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[6] + ".jpeg"));
+                    dado7.setIcon(imageDado);
+                    imageDado = new ImageIcon(getClass().getResource("/resources/dado.jpeg"));
+                    dado8.setIcon(imageDado);
+                    imageDado = new ImageIcon(getClass().getResource("/resources/dado.jpeg"));
+                    dado9.setIcon(imageDado);
+
+                    imageDado = new ImageIcon(getClass().getResource("/resources/dado.jpeg"));
+                    dado10.setIcon(imageDado);
+
+
+
+                    revalidate();
+                    repaint();
+
                 }
+
+
+
+
+
+
+            }else if (e.getSource()==prueba) {
+                int [] Usando = modelGeek.ObtenUsando();
+                int [] caras = modelGeek.getCaras();
+                modelGeek.getCorazones();
+
+                modelGeek.Realizar();
+                imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[0] + ".jpeg"));
+                dado1.setIcon(imageDado);
+                imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[1] + ".jpeg"));
+                dado2.setIcon(imageDado);
+                imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[2] + ".jpeg"));
+                dado3.setIcon(imageDado);
+                imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[3] + ".jpeg"));
+                dado4.setIcon(imageDado);
+                imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[4] + ".jpeg"));
+                dado5.setIcon(imageDado);
+                imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[5] + ".jpeg"));
+                dado6.setIcon(imageDado);
+                imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[6] + ".jpeg"));
+                dado7.setIcon(imageDado);
+
+                if(modelGeek.getCorazones()==1) {
+                    imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[7] + ".jpeg"));
+                    dado8.setIcon(imageDado);
+                }
+                else if (modelGeek.getCorazones()==2){
+                        imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[8] + ".jpeg"));
+                        dado9.setIcon(imageDado);
+                }
+                else if (modelGeek.getCorazones()==3){
+                        imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[9] + ".jpeg"));
+                        dado10.setIcon(imageDado);
+                }
+
+
+                /*
+
+                imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[8] + ".jpeg"));
+                dado9.setIcon(imageDado);
+                imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[9] + ".jpeg"));
+                dado10.setIcon(imageDado);
+
+                 */
+
+
+                //JOptionPane.showMessageDialog(null,""+Usando[0]+Usando[1]+Usando[2]+Usando[3]);
+
+
+                modelGeek.BorrarUsados();
+
+
+
+
+                revalidate();
+                repaint();
+
+
+
+
+
+            }
+            else if (e.getSource()==Borrar){
+                modelGeek.BorrarUsados();
             }
 
         }
+    }
+
+    private class Click implements MouseListener, MouseMotionListener, KeyListener {
+        @Override
+
+        public void mouseClicked(MouseEvent e) {
+
+
+
+
+
+
+
+            if (e.getSource() == dado1) {
+                int [] Usando = modelGeek.ObtenUsando();
+                int[] caras = modelGeek.getCaras();
+
+
+
+
+                if (Usando[0] == 0) {
+                    Usando[0] = caras[0];
+                    Usando[2] = 1;
+                }
+                else {
+                    Usando[1] = caras[0];
+                    Usando[3] = 1;
+                }
+
+            }
+
+            if (e.getSource() == dado2) {
+                int [] Usando = modelGeek.ObtenUsando();
+                int[] caras = modelGeek.getCaras();
+
+
+
+                if (Usando[0] == 0) {
+                    Usando[0] = caras[1];
+                    Usando[2] = 2;
+
+                } else {
+                    Usando[1] = caras[1];
+                    Usando[3] = 2;
+                }
+
+            }
+            if (e.getSource() == dado3) {
+                int [] Usando = modelGeek.ObtenUsando();
+                int[] caras = modelGeek.getCaras();
+
+
+                if (Usando[0] == 0) {
+                    Usando[0] = caras[2];
+                    Usando[2] = 3;
+
+                } else {
+                    Usando[1] = caras[2];
+                    Usando[3] = 3;
+                }
+
+            }
+            if (e.getSource() == dado4) {
+                int [] Usando = modelGeek.ObtenUsando();
+                int[] caras = modelGeek.getCaras();
+
+
+                if (Usando[0] == 0) {
+                    Usando[0] = caras[3];
+                    Usando[2] = 4;
+
+                } else {
+                    Usando[1] = caras[3];
+                    Usando[3] = 4;
+                }
+
+
+            }
+            if (e.getSource() == dado5) {
+                int [] Usando = modelGeek.ObtenUsando();
+                int[] caras = modelGeek.getCaras();
+
+
+                if (Usando[0] == 0) {
+                    Usando[0] = caras[4];
+                    Usando[2] = 5;
+
+                } else {
+                    Usando[1] = caras[4];
+                    Usando[3] = 5;
+                }
+
+            }
+            if (e.getSource() == dado6) {
+                int [] Usando = modelGeek.ObtenUsando();
+                int[] caras = modelGeek.getCaras();
+
+
+                if (Usando[0] == 0) {
+                    Usando[0] = caras[5];
+                    Usando[2] = 6;
+
+                } else {
+                    Usando[1] = caras[5];
+                    Usando[3] = 6;
+                }
+
+            }
+            if (e.getSource() == dado7) {
+                int [] Usando = modelGeek.ObtenUsando();
+                int[] caras = modelGeek.getCaras();
+
+
+                if (Usando[0] == 0) {
+                    Usando[0] = caras[6];
+                    Usando[2] = 7;
+
+                } else {
+                    Usando[1] = caras[6];
+                    Usando[3] = 7;
+                }
+
+
+            }
+            if (e.getSource() == dado8) {
+                int [] Usando = modelGeek.ObtenUsando();
+                int[] caras = modelGeek.getCaras();
+
+
+                if (Usando[0] == 0) {
+                    Usando[0] = caras[7];
+                    Usando[2] = 8;
+
+                } else {
+                    Usando[1] = caras[7];
+                    Usando[3] = 8;
+                }
+
+
+            }
+            if (e.getSource() == dado9) {
+                int [] Usando = modelGeek.ObtenUsando();
+                int[] caras = modelGeek.getCaras();
+
+
+                if (Usando[0] == 0) {
+                    Usando[0] = caras[8];
+                    Usando[2] = 9;
+
+                } else {
+                    Usando[1] = caras[8];
+                    Usando[3] = 9;
+                }
+
+
+
+
+
+
+            }
+            if (e.getSource() == dado10) {
+                int [] Usando = modelGeek.ObtenUsando();
+                int[] caras = modelGeek.getCaras();
+
+
+                if (Usando[0] == 0) {
+                    Usando[0] = caras[9];
+                    Usando[2] = 10;
+
+                } else {
+                    Usando[1] = caras[9];
+                    Usando[3] = 10;
+                }
+
+
+
+
+
+
+
+            }
+
+
+        }
+
+
 
         @Override
         public void mousePressed(MouseEvent e) {
@@ -323,6 +688,7 @@ public class GUIGridBagLayout extends JFrame {
         public void mouseReleased(MouseEvent e) {
 
         }
+
 
         @Override
         public void mouseEntered(MouseEvent e) {
@@ -336,6 +702,8 @@ public class GUIGridBagLayout extends JFrame {
 
         @Override
         public void keyTyped(KeyEvent e) {
+
+
 
         }
 
@@ -358,5 +726,6 @@ public class GUIGridBagLayout extends JFrame {
         public void mouseMoved(MouseEvent e) {
 
         }
+
     }
 }
