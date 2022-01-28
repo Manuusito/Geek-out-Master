@@ -99,7 +99,6 @@ public class ModelGeek<componemt> {
            else if (corazones>3){
 
                caras[Usando[2] - 1]=0;
-
            }
 
        }
