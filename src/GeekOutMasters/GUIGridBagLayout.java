@@ -15,7 +15,10 @@ public class GUIGridBagLayout extends JFrame {
             "\nOprime el botón lanzar para iniciar el juego" +
             "\nEl objetivo de este juego es conseguir la mayor cantidad de puntos juntando dados cuya cara visible es la\n" +
             "cara 42." +
-            "\nGeek Out Masters no es solo suerte, también importa la estrategia"
+            "\nGeek Out Masters no es solo suerte, también importa la estrategia" +
+            "\n Utiliza los botones Realizar para ejecutar la accion de los dos dados" +
+            "\n Boton borras para eliminar la seleccion del primer dado"+
+            "\n Boton reset para reiniciar el juego"
 
             ;
 
