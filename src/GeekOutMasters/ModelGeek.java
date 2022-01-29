@@ -36,6 +36,8 @@ public class ModelGeek<componemt> {
            caras[Usando[3]-1] = aleatorio.nextInt(6) + 1;
 
 
+
+
        }
        if (Usando[0]==2){
 

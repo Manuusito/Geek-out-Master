@@ -46,6 +46,7 @@ public class GUIGridBagLayout extends JFrame {
     private JLabel dado8;
     private JLabel dado9;
     private JLabel dado10;
+    private JLabel dado1vacio,dado2vacio,dado3vacio,dado4vacio,dado5vacio,dado6vacio,dado7vacio;
     private JLabel marcador;
     private JTextArea puntajeTex;
     private JButton lanzar;
@@ -217,6 +218,28 @@ public class GUIGridBagLayout extends JFrame {
         panelUsados.addKeyListener(click);
         panelUsados.setPreferredSize(new Dimension(400,240));
         panelUsados.setBorder(BorderFactory.createTitledBorder("Tus Dados Usados"));
+        /*
+
+        imageDado = new ImageIcon(getClass().getResource("/resources/0.jpeg"));
+        dado1vacio= new JLabel(imageDado);
+        dado2vacio= new JLabel(imageDado);
+        dado3vacio= new JLabel(imageDado);
+        dado4vacio= new JLabel(imageDado);
+        dado5vacio= new JLabel(imageDado);
+        dado6vacio= new JLabel(imageDado);
+        dado7vacio= new JLabel(imageDado);
+
+        panelUsados.add(dado1vacio);
+        panelUsados.add(dado2vacio);
+        panelUsados.add(dado3vacio);
+        panelUsados.add(dado4vacio);
+        panelUsados.add(dado5vacio);
+        panelUsados.add(dado6vacio);
+        panelUsados.add(dado7vacio);
+
+         */
+
+
 
         constraints.gridx=0;
         constraints.gridy=2;
@@ -272,10 +295,7 @@ public class GUIGridBagLayout extends JFrame {
         constraints.anchor=GridBagConstraints.LINE_END;
         this.add(puntajeTex,constraints);
 
-        //corazon=0;
-        //yaEsta=0;
-        //rondas=0;
-        //puntos=0;
+
 
     }
 
@@ -467,6 +487,24 @@ public void caraToDado1() {
                 }else{
 
                 }
+                /*
+
+                if (yaEsta==0){
+                    imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[10] + ".jpeg"));
+                    dado1vacio.setIcon(imageDado);
+                    yaEsta=yaEsta+1;
+
+
+                }
+
+                 */
+
+
+
+
+
+
+
 
 
 
