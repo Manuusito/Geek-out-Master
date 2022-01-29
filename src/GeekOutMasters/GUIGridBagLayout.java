@@ -6,8 +6,8 @@ import java.awt.event.*;
 
 /**
  * This class is used for play Geek out Masters
- * @autor Manuel Cuellar manuel.cuellar@correounivalle.edu.co
- * @version v.1.0.0 date:27/01/2022
+ * @autor Manuel Cuellar Montenegro -- 2041041 -- manuel.cuellar@correounivalle.edu.co
+ * @version v.1.0.0 date:28/01/2022
  */
 public class GUIGridBagLayout extends JFrame {
 
@@ -373,11 +373,14 @@ public void caraToDado1() {
 
             }else if (e.getSource()==terminarRonda){
 
-                if (rondas==5) {
-                    if (puntos >= 32) {
-                        JOptionPane.showMessageDialog(null, "has ganado :D");
+                if (rondas>=5) {
+                    if (puntos >= 30) {
+                        JOptionPane.showMessageDialog(null, "Has ganado Felicitaciones !!" +
+                                "\n Reinicia el juego para jugar otra vez.");
+
                     } else
-                        JOptionPane.showMessageDialog(null, "Has perdido");
+                        JOptionPane.showMessageDialog(null, "Has perdido" +
+                                "\n Reinicia el juego para jugar otra vez.");
 
                 }
                 else {
@@ -461,7 +464,14 @@ public void caraToDado1() {
                 else if (modelGeek.getCorazones()==3){
                         imageDado = new ImageIcon(getClass().getResource("/resources/" + caras[9] + ".jpeg"));
                         dado10.setIcon(imageDado);
+                }else{
+
                 }
+
+
+
+
+
 
 
                 /*
